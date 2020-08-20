@@ -1473,8 +1473,19 @@ fn packages_and_crates(){
 			module1::separated_function1();
 		}
 
-////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
-fn structures_and_collections(){
+fn structures_as_collections(){
     // Rust's standard library include many usefull data structures known as collections. A 
-    // collection can contain multiple values.
+    // collection can contain multiple values instead of one value as another data types.
+    // The mainly difference between another values types is collections are stored in the heap of
+    // the RAM memory, so can grow or shrik at real time when the program is running.
+
+    // There are many differents types of collections:
+    // -vectors: This collection type allow to store many variable number of values next to each
+    // other. This is very usefull when you don't know how many values will have something and want
+    // to be sure that you will not go into a bad scenario (in specific if you want use this for
+    // bigdata).
+    // -strings: As we mencionated before, this is a string of UTF-8 alphanumeric characters.
+    // -hash map: This is new. This allow associate a value with a particular key/tag.
+}
