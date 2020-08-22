@@ -1485,7 +1485,48 @@ fn structures_as_collections(){
     // -vectors: This collection type allow to store many variable number of values next to each
     // other. This is very usefull when you don't know how many values will have something and want
     // to be sure that you will not go into a bad scenario (in specific if you want use this for
-    // bigdata).
+    // bigdata). The index of each element start from zero (0).
     // -strings: As we mencionated before, this is a string of UTF-8 alphanumeric characters.
     // -hash map: This is new. This allow associate a value with a particular key/tag.
+    
+    // This is how you can create a vector.
+    // let mut variable: Vec<T> = Vec::new() where T is the variable's type.
+    
+    let mut vvariable: Vec<i32> = Vec::new();
+
+    // Or also you can create a vector with vec! macro.
+    // Rust will interpret the code for configure the type.
+
+    let mut vvariable2 = vec![1,2,3];
+
+    // For update the existing macro adding items:
+    vvariable.push(4); // Add 4 in the vector as first value.
+    vvariable.push(8); // Add 8 after 4 as second value.
+
+    // Dropp vector for release memory.
+    // As you know when you finish the key's code, the scope is out and the data is cleaned.
+    // Just put your vector into keys and then finish scope.
+    {
+    let mut vvariable3: Vec<i8> = Vec::new();
+    vvariable3.push(1);
+    vvariable3.push(2);
+    // Do another things that you want.
+    }
+    
+    // There are many ways in which you can get information from vector's position:
+    // Way1 using another variable:
+
+    let secondvalue: i32 = vvariable[1]; // The second value of "v". Remember; the first index is zero.
+    println!("Second Value of vvariable vector: {}",secondvalue);
+    
+    // Way 2
+    // Without intermediary for use in another comparations.
+    // This is the best way if you want compare values for vectors.
+    match vvariable.get(1) { // The second value.
+        Some(secondvalue) => println!("Match. With second value: {} {}", secondvalue, vvariable[1]),
+        None => println!("Don't match. Wich is very rare, check the code."),
+    }
+
+    // Way 2.1, directly to variable
+    let firstvalue = vvariable.get(0); // Remember. The index start from zero.
 }
