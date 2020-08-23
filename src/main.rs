@@ -1609,4 +1609,22 @@ fn structures_as_collections(){
     for b in s3.bytes() {
         println!("{}",b);
     }
+    
+    // Hash maps:
+    // The hash are like a score map; [KEY_NAME]: [VALUE]. Simple and more efficient than use
+    // variables, in performance and security terms.
+    // First, we import into score the HashMap module.
+    use std::collections::HashMap;
+    // Create the new type.
+    let mut scores = HashMap::new();
+    // Insert keys and values.
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+    // Take in consideration than;
+    // - The key must be a String, wich is owned by the hash map.
+    // - The value must be in i32, so you can not set any type of value and is not owned by the
+    // hash map.
+    // https://doc.rust-lang.org/book/ch08-03-hash-maps.html#accessing-values-in-a-hash-map
+    //
+
 }
