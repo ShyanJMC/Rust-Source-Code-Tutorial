@@ -1503,6 +1503,9 @@ fn structures_as_collections(){
     vvariable.push(4); // Add 4 in the vector as first value.
     vvariable.push(8); // Add 8 after 4 as second value.
 
+    // For remove the last existing value and return the last available.
+    vvariable.pop();
+
     // Dropp vector for release memory.
     // As you know when you finish the key's code, the scope is out and the data is cleaned.
     // Just put your vector into keys and then finish scope.
@@ -1529,4 +1532,81 @@ fn structures_as_collections(){
 
     // Way 2.1, directly to variable
     let firstvalue = vvariable.get(0); // Remember. The index start from zero.
+
+    // Iterating over values
+    for i in vvariable {
+        // Remember; i variable store each value of vvariable and then iterate them.
+        println!("vvariable items; {}", i);
+    }
+
+    // Even if the variable is muteable, you can iterate over them changing values, remember that
+    // the vector variable must be mutable, if not you can add; &mut before the name here:
+    for mut i2 in vvariable2 {
+        i2 += 15; // It's the same than put; i2 = i2 + 15. Because of that must be mutable.
+        println!("vvariable items with 15 add; {}", i2);
+    }
+
+    // If you remember, we said that a vector can store any value inside. So is reasonable use a
+    // vector with a enum.
+    enum evariable1 {
+        Var1(i8),
+        Var2(f64),
+        Var3(String),
+    }
+    let data = vec![
+        evariable1::Var1(3),
+        evariable1::Var2(15.64),
+        evariable1::Var3(String::from("Hello World")),
+    ];
+
+
+    // Before we touched the strings but now we will go more deeply.
+    // Just a note by ShyanJMC: 
+    // Take in consideration that Rust can controll embebeed hardware with low level so many things
+    // in the strings are trated with low-level controll in mind, between languages like C and
+    // others like Python.
+    // As you see before, there are two types of strings in rust; str which is in the core of Rust
+    // and String wich is in the Rust standar library.
+    // You can see an string (str or String) like a collection of UTF-8 bytes in memory. Because of
+    // is very needed for minimal usage, kown how to create a String we told you at start but in
+    // this part of the live source code, we will go more deeply in this terms to understand
+    // better the functionality of this.
+    // Because Rust must know how to manage the string's memory, is because you must use
+    // ".to_string()" function if you want add UTF-8 bytes to existing before string variable.
+    let mut s: String = String::new();
+    s = "Hello ".to_string();
+    s = String::from("World.");
+    // If you remember; .push_str() for add strings into variables, you probably know that with
+    // .push() you can add only one single character.
+    s.push('.');
+    // Or even you can add strings between them:
+    let s2 = String::from("Linux Rules!");
+    let s3 = s + &s2; // With addition the second parameter must always do by reference/borrowing.
+    
+    // In other languges you can index the value of a string's character;
+    // C:
+    //      int string = c[0];
+    // In Rust you can not do that in anyway. Why? Because if do it, Rust should return you the byte
+    // value of the character in that position, not the character per se. Also when you use index
+    // to characters, the language must start from the zero position to the indicated, so its
+    // consume time and sometimes the number index is wrong.
+    // There are tree ways in which the languge store the data:
+    // - Byte; This the most common way, and the lowest. Is the way in which all cpus store data.
+    // - Unicode: This is the way in wich Rust store char (one single character) data.
+    // - Grapheme cluster: This is most abstract way, because this way is which humans read.
+    // As I said; is a very bad idea use index in strings, but if you still want use it the only
+    // way in which you can use is by byte.
+    // &c[X .. Y]
+    // In which "c" is the string variable, and X the byte init and Y the byte end.
+    // So be very carefull which range use, because if you select a wrong range, you will get a
+    // very bad error at runtime.
+    // If you need split a string into each character you can use; .chars()
+    for a in s3.chars() {
+        println!("{}", a);
+        // So, will print each char of "s" into new lines.
+    }
+    // If you need split by byes; .bytes()
+    for b in s3.bytes() {
+        println!("{}",b);
+    }
 }
