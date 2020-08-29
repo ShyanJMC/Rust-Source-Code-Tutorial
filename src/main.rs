@@ -1212,14 +1212,14 @@ fn function_match( _x: String ){
     //          [execute_line_n];
     //          }
     // For example;
-    let _varExample: String = String::from("Hi");
-    let _varCompare: String = String::from("Value2");
-    match _varExample {
-        _varCompare => println!("Match!."),
+    let _var_example: String = String::from("Hi");
+    let _var_compare: String = String::from("Value2");
+    match _var_example {
+        _var_compare => println!("Match!."),
     }
     // Also we can compare to Option<T>
-    let _varExample2: Option<u8> = Some(10);
-    match _varExample2 {
+    let _var_example2: Option<u8> = Some(10);
+    match _var_example2 {
         None => None,
         // Here "i" take the Some's value of parameter in this case; 10
         Some(i) => Some(i+1),
@@ -1228,12 +1228,12 @@ fn function_match( _x: String ){
     // If you are Linux user, you must know the wildcard for zsh and bash; *
     // Well, Rust have the same for match; _ , yes _
     // Take in consideration you can not compare more than one, why? Simple, ownership my friend. So we create another.
-    let _varExample2: String = String::from("Hi");
-    let _varCompare2: String = String::from("Value2");
-    match _varExample2 {
-        _varCompare2 => println!("Match!."),
+    let _var_example2: String = String::from("Hi");
+    let _var_compare2: String = String::from("Value2");
+    match _var_example2 {
+        _var_compare2 => println!("Match!."),
         // Just remember put " _ " at the end of match, because if you put before another arm will not check it.
-        _ => println!("Don't match with _varCompare."),
+        _ => println!("Don't match with _var_compare."),
     }
 
 }
@@ -1364,16 +1364,16 @@ fn packages_and_crates(){
 	// Easy, as before, Rust do private by default. So even if the struct is
 	// public, we must set what variables are too.
 	mod build_house {
-		pub struct house_measurements {
+		pub struct HouseMeasurements {
 			pub house_floor_large: u16,
 			pub house_floor_width: u16,
 			house_radius: u16,
 		}
 
-		impl house_measurements {
+		impl HouseMeasurements {
 			// Remember return the struct's same type.
-			pub fn house_measurements_fn(wid: u16, lar: u16) -> house_measurements {
-				house_measurements {
+			pub fn house_measurements_fn(wid: u16, lar: u16) -> HouseMeasurements {
+				HouseMeasurements {
 					house_floor_large: lar,
 					house_floor_width: wid,
 					house_radius: lar * wid,
@@ -1386,7 +1386,7 @@ fn packages_and_crates(){
 		}
 
 		// Do you prefer field by field? Just do this outside the module
-		// let mut struct_x = build_house::house_measurements::house_measurements_fn(64,15);
+		// let mut struct_x = build_house::HouseMeasurements::house_measurements_fn(64,15);
 		// println!("{}",struct_x.house_radius);
 
 	}
@@ -1548,15 +1548,15 @@ fn structures_as_collections(){
 
     // If you remember, we said that a vector can store any value inside. So is reasonable use a
     // vector with a enum.
-    enum evariable1 {
+    enum Evariable1 {
         Var1(i8),
         Var2(f64),
         Var3(String),
     }
     let data = vec![
-        evariable1::Var1(3),
-        evariable1::Var2(15.64),
-        evariable1::Var3(String::from("Hello World")),
+        Evariable1::Var1(3),
+        Evariable1::Var2(15.64),
+        Evariable1::Var3(String::from("Hello World")),
     ];
 
 
@@ -1620,11 +1620,85 @@ fn structures_as_collections(){
     // Insert keys and values.
     scores.insert(String::from("Blue"), 10);
     scores.insert(String::from("Yellow"), 50);
-    // Take in consideration than;
+    // Take in consideration that;
     // - The key must be a String, wich is owned by the hash map.
     // - The value must be in i32, so you can not set any type of value and is not owned by the
     // hash map.
-    // https://doc.rust-lang.org/book/ch08-03-hash-maps.html#accessing-values-in-a-hash-map
+
+    // What about is we have configured a HashMap with a hundred of keys and we need known if
+    // someone match?
+    // Take a look:
+    // We started first a string with the key to match:
+    let team_color = String::from("Red");
+    // Now we use the started HashMap to match (scores variable is the HashMap from upper lines):
+    let vmatch = scores.get(&team_color); 
+    // The .get() function will provide the value for the key "team_color" (and their value).
+    // The two possible returns are "None" is don't match with a value, or "Some<t>"
+    match vmatch {
+        None => println!("The team doesn't match with existing one."),
+        _ => for (key,value) in &scores {
+                // As the HashMaps store the data next each other you can print value in pairs
+                println!("{}: {}", key, value);
+        },
+    };
+    // Rust only allow that each key is pointing to only one value at the same time.
+    // So, is you want update a value, you must overwrite the old.
+    // The overwrite can be done with ".insert", yes insert the value doesn't matter if have value
+    // or not, while the key be the same.
+    scores.insert(String::from("Blue"), 30); // So, this overwrite the older value; 10.
+    let mut blue_team_score = 100;
+    scores.insert(String::from("Blue"), blue_team_score); // This overwrite the last value; 30.
+
+    // But, what happen if you want only add if not exist a previus value? With ".entry()" function,
+    // wich will return the value of key, we will pass the return to ".or_insert()" which if
+    // doesnt' exist a value, will insert the parameter.
+    // Remember; scores variable is our HashMap variable.
+    scores.entry(String::from("Blue")).or_insert(1200); 
+    // That will pass the "score" HashMap to "entry" function to check if exist a value to "Blue"
+    // key passing it to "or_insert", if doesn't "or_insert" will insert 1200 value to it.
+    
+    // Now we will see how to split by whitespaces and use HashMap for store the count of words.
+    
+    let text = "hello world wonderful world";
+
+    let mut map = HashMap::new();
+
+    for word in text.split_whitespace() {
+        // ".split_whitespace()" will split words using as separator whitespaces.
+        let count = map.entry(word).or_insert(0);
+        // Then, each word stored in the iteration (in the variable word at start from "for") will
+        // be checked if have value
+        *count += 1;
+    }
+
+    println!("{:?}", map);
+
+    // HashMap uses a “cryptographically strong”1 hashing function that can provide resistance to 
+    // Denial of Service (DoS) attacks. This is not the fastest hashing algorithm available, but 
+    // the trade-off for better security that comes with the drop in performance is worth it. 
+    // If you profile your code and find that the default hash function is too slow for your 
+    // purposes, you can switch to another function by specifying a different hasher. 
+    // A hasher is a type that implements the BuildHasher trait. 
+
+    // Rust groups errors in two; recoverable and unrecoverable error. For the first, for example
+    // when a file is not found, is reasonable report it to the user and try again. For the second
+    // there are two basic options; or the program will show a internal bug or will crash.
+    // We saw the first with "Result<T, E>" and now we will see the second with; panic! (remember;
+    // the ! at the end indicate it is a macro).
+
+    // When you execute the panic! macro, Rust will stop execution, clean the memory and then quit.
+    // The process of clean the memory for each function is called; unwinding.
+    // Is secure use the panic! macro because clean the stack of memory when exit. But if you need
+    // that the binary must be small as you can, you can avoid the memory clean but be carefull
+    // because that remain memory must be clean by the OS. To avoid the automatic clean you can
+    // use; abort.
+    // Go to Cargo.toml in the parent folder to see how to create alias, in this case for use panic
+    // as an alias "abort".
+    
+    // Now after editing Cargo.toml you will see that when you call panic! will use abort.
+    // I highly reccomend see this part of error handles in the rust webpage, because there are so
+    // many examples that is more easy, and with more quality, see there;
+    // https://doc.rust-lang.org/book/ch09-01-unrecoverable-errors-with-panic.html
     //
 
 }
