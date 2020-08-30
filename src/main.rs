@@ -342,6 +342,9 @@ function.");
 
     // Collections
     structures_as_collections();
+
+    // Errors
+    hanling_errors();
 }
 
 
@@ -1672,7 +1675,9 @@ fn structures_as_collections(){
     }
 
     println!("{:?}", map);
+}
 
+fn hanling_errors(){
     // HashMap uses a “cryptographically strong”1 hashing function that can provide resistance to 
     // Denial of Service (DoS) attacks. This is not the fastest hashing algorithm available, but 
     // the trade-off for better security that comes with the drop in performance is worth it. 
@@ -1684,7 +1689,8 @@ fn structures_as_collections(){
     // when a file is not found, is reasonable report it to the user and try again. For the second
     // there are two basic options; or the program will show a internal bug or will crash.
     // We saw the first with "Result<T, E>" and now we will see the second with; panic! (remember;
-    // the ! at the end indicate it is a macro).
+    // the ! at the end indicate it is a macro. Also remember that Result<T,E> is a return of
+    // standard library, not a function you can use).
 
     // When you execute the panic! macro, Rust will stop execution, clean the memory and then quit.
     // The process of clean the memory for each function is called; unwinding.
@@ -1701,4 +1707,23 @@ fn structures_as_collections(){
     // https://doc.rust-lang.org/book/ch09-01-unrecoverable-errors-with-panic.html
     //
 
+    // Now we will use Result<T,E> to handle between recoverable and unrecoverable errors.
+    // T is the result type to return if was right and E the result type to return if fail with
+    // some bug.
+    // For this we will use files. Yes, it's time to operate with files in your OS. 
+    
+    use std::fs::File; // "std" for standard library, "fs" of file system and "File".
+
+    // First, before open a file we need a variable to store the data to point to file, and then
+    // run the command to open it.
+
+    let vfile = File::open("test1.txt"); // If we don't spcify the absolute path, will be used
+    // or checked that name in your parent folder, in which you execute this file.
+    // Now we will compare to ensure that is valid using this time panic! if not:
+    // We use the same var to not use more memory.
+    vfile = match vfile {
+        Ok(file) =>  file,
+        Err(error) => panic!("Failed to open file. Check the same. Error; {}", error),
+    };
+    // https://doc.rust-lang.org/book/ch09-02-recoverable-errors-with-result.html#matching-on-different-errors
 }
