@@ -345,6 +345,9 @@ function.");
 
     // Errors
     hanling_errors();
+
+    // Generics values
+    generics(&15);
 }
 
 
@@ -484,7 +487,7 @@ fn inputvalidation(){
         Ok(num) => num,
         // if there are issues, will execute "continue". But the execution can be anything.
         // Can be used "continue" for the case that is a loop in function to continue in error case.
-        Err(_) => 1,
+        Err(_) => 1, // If you don't want do anything when there are an error you can use "continue".
     };
 }
 
@@ -1479,7 +1482,7 @@ fn packages_and_crates(){
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn structures_as_collections(){
-    // Rust's standard library include many usefull data structures known as collections. A 
+    // Rust's standard library include many usefull data structures known as collections. A
     // collection can contain multiple values instead of one value as another data types.
     // The mainly difference between another values types is collections are stored in the heap of
     // the RAM memory, so can grow or shrik at real time when the program is running.
@@ -1491,10 +1494,10 @@ fn structures_as_collections(){
     // bigdata). The index of each element start from zero (0).
     // -strings: As we mencionated before, this is a string of UTF-8 alphanumeric characters.
     // -hash map: This is new. This allow associate a value with a particular key/tag.
-    
+
     // This is how you can create a vector.
     // let mut variable: Vec<T> = Vec::new() where T is the variable's type.
-    
+
     let mut vvariable: Vec<i32> = Vec::new();
 
     // Or also you can create a vector with vec! macro.
@@ -1518,13 +1521,13 @@ fn structures_as_collections(){
     vvariable3.push(2);
     // Do another things that you want.
     }
-    
+
     // There are many ways in which you can get information from vector's position:
     // Way1 using another variable:
 
     let secondvalue: i32 = vvariable[1]; // The second value of "v". Remember; the first index is zero.
     println!("Second Value of vvariable vector: {}",secondvalue);
-    
+
     // Way 2
     // Without intermediary for use in another comparations.
     // This is the best way if you want compare values for vectors.
@@ -1564,7 +1567,7 @@ fn structures_as_collections(){
 
 
     // Before we touched the strings but now we will go more deeply.
-    // Just a note by ShyanJMC: 
+    // Just a note by ShyanJMC:
     // Take in consideration that Rust can controll embebeed hardware with low level so many things
     // in the strings are trated with low-level controll in mind, between languages like C and
     // others like Python.
@@ -1585,7 +1588,7 @@ fn structures_as_collections(){
     // Or even you can add strings between them:
     let s2 = String::from("Linux Rules!");
     let s3 = s + &s2; // With addition the second parameter must always do by reference/borrowing.
-    
+
     // In other languges you can index the value of a string's character;
     // C:
     //      int string = c[0];
@@ -1612,7 +1615,7 @@ fn structures_as_collections(){
     for b in s3.bytes() {
         println!("{}",b);
     }
-    
+
     // Hash maps:
     // The hash are like a score map; [KEY_NAME]: [VALUE]. Simple and more efficient than use
     // variables, in performance and security terms.
@@ -1634,7 +1637,7 @@ fn structures_as_collections(){
     // We started first a string with the key to match:
     let team_color = String::from("Red");
     // Now we use the started HashMap to match (scores variable is the HashMap from upper lines):
-    let vmatch = scores.get(&team_color); 
+    let vmatch = scores.get(&team_color);
     // The .get() function will provide the value for the key "team_color" (and their value).
     // The two possible returns are "None" is don't match with a value, or "Some<t>"
     match vmatch {
@@ -1656,12 +1659,12 @@ fn structures_as_collections(){
     // wich will return the value of key, we will pass the return to ".or_insert()" which if
     // doesnt' exist a value, will insert the parameter.
     // Remember; scores variable is our HashMap variable.
-    scores.entry(String::from("Blue")).or_insert(1200); 
+    scores.entry(String::from("Blue")).or_insert(1200);
     // That will pass the "score" HashMap to "entry" function to check if exist a value to "Blue"
     // key passing it to "or_insert", if doesn't "or_insert" will insert 1200 value to it.
-    
+
     // Now we will see how to split by whitespaces and use HashMap for store the count of words.
-    
+
     let text = "hello world wonderful world";
 
     let mut map = HashMap::new();
@@ -1677,13 +1680,13 @@ fn structures_as_collections(){
     println!("{:?}", map);
 }
 
-fn hanling_errors(){
-    // HashMap uses a “cryptographically strong”1 hashing function that can provide resistance to 
-    // Denial of Service (DoS) attacks. This is not the fastest hashing algorithm available, but 
-    // the trade-off for better security that comes with the drop in performance is worth it. 
-    // If you profile your code and find that the default hash function is too slow for your 
-    // purposes, you can switch to another function by specifying a different hasher. 
-    // A hasher is a type that implements the BuildHasher trait. 
+fn hanling_errors() {
+    // HashMap uses a “cryptographically strong”1 hashing function that can provide resistance to
+    // Denial of Service (DoS) attacks. This is not the fastest hashing algorithm available, but
+    // the trade-off for better security that comes with the drop in performance is worth it.
+    // If you profile your code and find that the default hash function is too slow for your
+    // purposes, you can switch to another function by specifying a different hasher.
+    // A hasher is a type that implements the BuildHasher trait.
 
     // Rust groups errors in two; recoverable and unrecoverable error. For the first, for example
     // when a file is not found, is reasonable report it to the user and try again. For the second
@@ -1700,7 +1703,7 @@ fn hanling_errors(){
     // use; abort.
     // Go to Cargo.toml in the parent folder to see how to create alias, in this case for use panic
     // as an alias "abort".
-    
+
     // Now after editing Cargo.toml you will see that when you call panic! will use abort.
     // I highly reccomend see this part of error handles in the rust webpage, because there are so
     // many examples that is more easy, and with more quality, see there;
@@ -1710,8 +1713,8 @@ fn hanling_errors(){
     // Now we will use Result<T,E> to handle between recoverable and unrecoverable errors.
     // T is the result type to return if was right and E the result type to return if fail with
     // some bug.
-    // For this we will use files. Yes, it's time to operate with files in your OS. 
-    
+    // For this we will use files. Yes, it's time to operate with files in your OS.
+
     use std::fs::File; // "std" for standard library, "fs" of file system and "File".
 
     // First, before open a file we need a variable to store the data to point to file, and then
@@ -1721,9 +1724,146 @@ fn hanling_errors(){
     // or checked that name in your parent folder, in which you execute this file.
     // Now we will compare to ensure that is valid using this time panic! if not:
     // We use the same var to not use more memory.
-    vfile = match vfile {
-        Ok(file) =>  file,
-        Err(error) => panic!("Failed to open file. Check the same. Error; {}", error),
-    };
-    // https://doc.rust-lang.org/book/ch09-02-recoverable-errors-with-result.html#matching-on-different-errors
+    // vfile = match vfile {
+    //    Ok(file) => file,
+    //    Err(error) => panic!("Failed to open file. Check the same. Error; {}", error),
+    // };
+
+    // If we want to handle different type of issues, we must use a second match for many type of
+    // issues:
+    
+    // Here we must include the crate that support matching errors:
+    use std::io::ErrorKind; // Remember "io" means "imput/otput".
+
+   // We could use match as many times we can, but I will show you a more optimized way.
+   // Is easy lost in this, so don't be fraid and re read as many times you need and understand
+   // each line.
+   // After the order to open a file, we unwrap the return of "open" operation to operate many
+   // times. The return of all after is under "error".
+   let vfile2 = File::open("test2.txt").unwrap_or_else(|error| {
+       // Still inside the "unwrap_or_else" we evaluate if the error match with "NotFound".
+       if error.kind() == ErrorKind::NotFound {
+           // If Match we create it. And evaluate again using as temporal variable "error".
+           File::create("hello.txt").unwrap_or_else(|error| {
+               // If there are some type of error we make an inmediate panic.
+               panic!("Problem creating the file: {:?}", error);
+           })
+        // Else if the error don't match with "ErrorKind::NotFound"
+        } else {
+            panic!("Problem opening the file: {:?}", error);
+        }
+    });
+   // By default when you use the call ".unwrap" you are doing a corroboration.
+   // Unwrap will check the result immediately, if the result is ok will return the value ( Ok() ),
+   // if there are some error ( Err(error) ) will return panic!.
+   // Is the same function that we used some lines upper, but with the messages of panic!
+   // specified.
+   // Additionally, the "unwrap_or_else" provide the feature to use inside the "if" and "else".
+   // As you now the "unwrap" function is very similar to another that we used before; "expect". We
+   // used it since the first function. The main difference between one and another is the second
+   // ("expect") allow us to specify the panic! message.
+   
+    let f = File::open("hello.txt").expect("Failed to open hello.txt");
+
+    // Propagating the error: when you call a function and that function fails, is better not end
+    // the program there. Instead of that, you can return the value to the code that called him and
+    // then decide what to do.
+    // Becuase of this, is mandatory add to the function's header as return; Result<String, io::Error>
+    
+    // There are an excelent paper to read about this, in specific "Propagating Errors" of Rust's
+    // documentation:
+    // https://doc.rust-lang.org/book/ch09-02-recoverable-errors-with-result.html#propagating-errors
+    
+    // When your code performs operations on values, your code should verify the values are valid 
+    // first and panic if the values aren’t valid. This is mostly for safety reasons: 
+    // attempting to operate on invalid data can expose your code to vulnerabilities. 
+    // This is the main reason the standard library will call panic! if you attempt an out-of-bounds 
+    // memory access: trying to access memory that doesn’t belong to the current data structure 
+    // is a common security problem. 
+    // Functions often have contracts: their behavior is only guaranteed if the inputs meet 
+    // particular requirements. Panicking when the contract is violated makes sense because a contract 
+    // violation always indicates a caller-side bug and it’s not a kind of error you want the calling 
+    // code to have to explicitly handle. In fact, there’s no reasonable way for calling code to 
+    // recover; the calling programmers need to fix the code. Contracts for a function, especially 
+    // when a violation will cause a panic, should be explained in the API documentation for the function.
+}
+
+
+// Now we will re check how to write specifics and generics function's headers:
+// - As you know, if you don't write anything in arguments path, the function don't allow
+// arguments.
+
+// - If you specify a variable name, you must specify after the type;           _x: String
+
+// - You can specify a generic type (for anyone; can be string, integer, or anything) for use at
+// the same type for many variables;                                            fn [NAME]<T>([NAME]: &[T]) -> &T
+// So it indicate that; the function [NAME] have a generic type "T", then the parameters is the
+// same generic type and it is returned when the function finished.
+
+// - If you use it in structs, you must indicate after the name. For example;     struct [NAME]<T> { }
+// Remember that if you specify one generic type, you can use as many arguments as you want but
+// all must be the same type. If you can specify more than one generic type, you can do it
+// separating it with "," .
+// Maybe you already know, but if you didn't see you I explain you; Option, match and Result
+// have generic types, so you can operate without matter the parameter's type:
+//       enum Result<T, E> {
+//           Ok(T),
+//           Err(E),
+//       }
+// But what if we want implement a impl ? Easy, the same syntax:
+
+struct Point<T> {
+    x: T,
+    y: T,
+}
+
+// If you specify some specific type as i32 is the same way, replacing T for specific type instead
+// of generic.
+impl<T> Point<T> {
+        fn x(&self) -> &T {
+           &self.x
+        }
+}
+
+// As was mentioned before you can specify a lot of generics type separeting by ","
+struct Point2<X,UYX>{
+    x: X,
+    y: UYX,
+}
+
+impl<X,UYX> Point2<X,UYX>{
+    fn fnc1_0<Z,YUXZ>(self, other: Point2<X,UYX>) -> Point2<X,UYX> {
+        Point2 {
+            x: self.x,
+            y: other.y,
+        }
+    }
+}
+
+
+fn generics<T>( _x: &T) -> Point<&T> {
+
+// And as was specified in the header, the return must be T type.
+let varx = Point{ x: _x, y: _x};
+varx
+
+}
+
+// Recomended  lecture;
+// https://doc.rust-lang.org/book/ch10-01-syntax.html#performance-of-code-using-generics
+
+fn traits(){
+    // A trait tells to Rust's compiler about functionality a particular type has and can share
+    // with other types. 
+    // Traits are very similar to a feature oftern called interfaces in other languajes. 
+    // A type’s behavior consists of the methods we can call on that type. Different types 
+    // share the same behavior if we can call the same methods on all of those types. 
+    // Trait definitions are a way to group method signatures together to define a set of 
+    // behaviors necessary to accomplish some purpose.
+    
+    // A trait can have multiple methods in its body: the method signatures are listed one per 
+    // line and each line ends in a semicolon.
+
+    // 
+    //
 }
