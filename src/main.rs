@@ -1856,7 +1856,7 @@ fn traits(){
     // A trait tells to Rust's compiler about functionality a particular type has and can share
     // with other types. 
     // Traits are very similar to a feature oftern called interfaces in other languajes. 
-    // A type’s behavior consists of the methods we can call on that type. Different types 
+    // A type’s behavior consists of the methods we can call on unkown type (self). Different types 
     // share the same behavior if we can call the same methods on all of those types. 
     // Trait definitions are a way to group method signatures together to define a set of 
     // behaviors necessary to accomplish some purpose.
@@ -1864,6 +1864,72 @@ fn traits(){
     // A trait can have multiple methods in its body: the method signatures are listed one per 
     // line and each line ends in a semicolon.
 
-    // 
+    // Syntax:
+    // pub trait [NAME] {
+    //      fn [FUNCTION](&self) -> [RETURN_TYPE];
+    // }
+    //
+    // In another words; the propose of traits is execute functions when you passtrough values.
+    // [variable].[trait]       or      [trait0].[trait]
+    // So supose that your trait is "trait". When you pass the data of "variable" or "trait0" to
+    // "trait" will execute specific methods that you indicated before.
+    // As you probably already imaginae, is better if you put your Trait into a module.
+
+    // You need take under consideration this;
+    // - A trait is defined with the function will execute when you call it.
+    // - It trait is then used in a implementation for a specific type (all methods must be
+    // implemented in that specific type). So "self" will be considered as that type.
+    //
+    // But wait, you said "unkown type (self)" before. Yes, remember "different types share the
+    // same behavior" so you use specifics methods of the Trait for specific types (you will not
+    // use String method for a u32, right? I hope so).
+
+    pub trait TraitPrime {
+        fn Prime_string(&self) -> std::str::Chars;
+        fn Prime_u32(&self) -> &u32;
+        fn Prime_i32(&self);
+    } 
+    // Here we need stop to clarify first: you can or not specifie the complete method. Before
+    // I didn't, so when I implement that Trait in a specific type I need put the complete option:
+    
+    impl TraitPrime for String {
+        // TraitPrime is implemeted for type "string". And then I speficie which function will use:
+        fn Prime_string(&self) -> std::str::Chars {
+            self.chars()
+        }
+        // Remember all methods must be implemented into the type.
+        fn Prime_u32(&self) -> &u32 {
+            let v: &u32 = &(0 + 1);
+            // Remember, is refferenced with "&".
+            v
+        }
+
+        fn Prime_i32(&self) {
+            println!("Done."); 
+        }
+    }
+    // If we specified the complete function when we created the trait is not necessary do it in
+    // the implementation.
+
+    let vtrait: std::str::Chars = TraitPrime::Prime_string(&(String::from("hello world")));
+    // As you can see above, we used the trait for "Prime_string" method/function with "string" as
+    // input (as is in; impl TraitPrime for String ) and we specified the type of "vtrait" variable which the return
+    // specified when we declareted the method in "pub trait TraitPrime".
+    // But what make special? Easy, as you specify the type implementation, you can use the same
+    // Trait for as many types you want putting as many "impl TraitPrime for XXX" you considered.
+    // The adventage of this is doesn't matter the "self" type, Rust will redirrect to the specific
+    // implementation.
+    // Of course you can use Traits in as many ways you want (be carefull that are used in right
+    // way). 
+    // Just remember; if you want do an implementation inside a Struct the type must be the
+    // Struct's name.
+    // One restriction to note with trait implementations is that we can implement a trait on a type 
+    // only if either the trait or the type is local to our crate.
+    // But we can’t implement external traits on external types.
+    // This restriction is part of a property of programs called coherence, and more specifically
+    // the orphan rule, so named because the parent type is not present. This rule ensures that
+    // other people’s code can’t break your code and vice versa. Without the rule, two crates could
+    // implement the same trait for the same type, and Rust wouldn’t know which implementation to
+    // use.
     //
 }
