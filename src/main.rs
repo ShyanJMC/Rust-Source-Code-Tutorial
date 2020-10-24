@@ -1905,7 +1905,7 @@ fn traits(){
         }
 
         fn Prime_i32(&self) {
-            println!("Done."); 
+            println!("Done. Used; {}", self); 
         }
     }
     // If we specified the complete function when we created the trait is not necessary do it in
@@ -1920,7 +1920,7 @@ fn traits(){
     // The adventage of this is doesn't matter the "self" type, Rust will redirrect to the specific
     // implementation.
     // Of course you can use Traits in as many ways you want (be carefull that are used in right
-    // way). 
+    // way). This include the "self" variable, you can operate
     // Just remember; if you want do an implementation inside a Struct the type must be the
     // Struct's name.
     // One restriction to note with trait implementations is that we can implement a trait on a type 
@@ -1931,5 +1931,6 @@ fn traits(){
     // other people’s code can’t break your code and vice versa. Without the rule, two crates could
     // implement the same trait for the same type, and Rust wouldn’t know which implementation to
     // use.
-    //
+    // And even something better; include more than one trait.
+    // https://doc.rust-lang.org/book/ch10-02-traits.html#specifying-multiple-trait-bounds-with-the--syntax
 }
