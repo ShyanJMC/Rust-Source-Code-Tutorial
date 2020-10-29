@@ -1885,34 +1885,34 @@ fn traits(){
     // use String method for a u32, right? I hope so).
 
     pub trait TraitPrime {
-        fn Prime_string(&self) -> std::str::Chars;
-        fn Prime_u32(&self) -> &u32;
-        fn Prime_i32(&self);
+        fn prime_string(&self) -> std::str::Chars;
+        fn prime_u32(&self) -> &u32;
+        fn prime_i32(&self);
     } 
     // Here we need stop to clarify first: you can or not specifie the complete method. Before
     // I didn't, so when I implement that Trait in a specific type I need put the complete option:
-    
+
     impl TraitPrime for String {
         // TraitPrime is implemeted for type "string". And then I speficie which function will use:
-        fn Prime_string(&self) -> std::str::Chars {
+        fn prime_string(&self) -> std::str::Chars {
             self.chars()
         }
         // Remember all methods must be implemented into the type.
-        fn Prime_u32(&self) -> &u32 {
+        fn prime_u32(&self) -> &u32 {
             let v: &u32 = &(0 + 1);
             // Remember, is refferenced with "&".
             v
         }
 
-        fn Prime_i32(&self) {
+        fn prime_i32(&self) {
             println!("Done. Used; {}", self); 
         }
     }
     // If we specified the complete function when we created the trait is not necessary do it in
     // the implementation.
 
-    let vtrait: std::str::Chars = TraitPrime::Prime_string(&(String::from("hello world")));
-    // As you can see above, we used the trait for "Prime_string" method/function with "string" as
+    let vtrait: std::str::Chars = TraitPrime::prime_string(&(String::from("hello world")));
+    // As you can see above, we used the trait for "prime_string" method/function with "string" as
     // input (as is in; impl TraitPrime for String ) and we specified the type of "vtrait" variable which the return
     // specified when we declareted the method in "pub trait TraitPrime".
     // But what make special? Easy, as you specify the type implementation, you can use the same
@@ -1932,5 +1932,43 @@ fn traits(){
     // implement the same trait for the same type, and Rust wouldn’t know which implementation to
     // use.
     // And even something better; include more than one trait.
-    // https://doc.rust-lang.org/book/ch10-02-traits.html#specifying-multiple-trait-bounds-with-the--syntax
+
+    pub fn notify2(item: &(impl TraitPrime + TraitPrime)) {
+    }
+    pub fn notify3<T: TraitPrime + TraitPrime>(item: &T) {
+    }
+
+    // When you specify one more trait for arguments, Rust will use the trait which correspond to
+    // the argument's type.
+    // In this case as specified use "T" generic type with traits "PartialOrd" and "copy" which
+    // first is for u32 type and second for char type.
+    // When we call "largest" we can use char or u32 types without matter the situation. Rust will
+    // detect the argument's type and will detect if the type is the right for which implement it
+    
+    fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
+        let mut largest = list[0];
+        for &item in list {
+            if item > largest {
+                largest = item;
+            }
+        }
+        largest
+    }
+
+    fn call_multi_trait() {
+        let number_list = vec![34, 50, 25, 100, 65];
+        let result = largest(&number_list);
+        println!("The largest number is {}", result);
+
+        let char_list = vec!['y', 'm', 'a', 'q'];
+        let result = largest(&char_list);
+        println!("The largest char is {}", result);
+    }
+
+
+    // Even we can return a trait.
+    // Re see the function "largest", Do you see how the return is the generic type "T"?
+    // As before we speciied.
+
+
 }
